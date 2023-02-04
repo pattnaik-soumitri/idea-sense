@@ -20,9 +20,13 @@
             <q-card-section>
               <q-item>
                 <q-item-section avatar thumbnail>
-                  <q-avatar size="xl">
-                    <img :src="idea.avatar" style="border: 3px solid #1875D1; border-radius: 100%;" />
-                  </q-avatar>
+                  <!-- <q-avatar size="xl"> -->
+                    <div class="outer-circle">
+                      <div class="inner-circle">
+                        <img class="inner-image" :src="idea.avatar" :alt="idea.author" />
+                      </div>
+                    </div>
+                  <!-- </q-avatar> -->
                 </q-item-section>
 
                 <q-item-section>
@@ -139,5 +143,26 @@ const like = id => {
 .my-card {
   margin-bottom:5px;
   border-radius: 14px;
+}
+
+.outer-circle {
+  width: 56px;
+  height: 56px;
+  border: 4px solid #1875D1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.inner-circle {
+  width:42px;
+  height:42px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+img.inner-image {
+  width: 100%;
+  height: auto;
 }
 </style>
