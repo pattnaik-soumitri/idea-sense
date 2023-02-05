@@ -14,7 +14,7 @@
         </div>
 
         <div class="q-mt-none">
-          <q-card v-for="idea in ideas" :key="idea.id" class="my-card" bordered flat>
+          <q-card v-for="idea in ideas" :key="idea.id" class="this-card rounded-card" bordered flat>
 
             <!-- AVATAR HEADER -->
             <q-card-section>
@@ -104,9 +104,8 @@ const like = id => {
 </script>
 
 <style scoped lang="scss">
-.my-card {
+.this-card {
   margin-bottom:5px;
-  border-radius: 14px;
 }
 
 .outer-circle {

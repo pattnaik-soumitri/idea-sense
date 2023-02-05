@@ -14,7 +14,7 @@
 
     <q-drawer class="q-mobile-only" show-if-above v-model="leftDrawerOpen" side="left" width="570" style="background-color: #f3f2ee">
       <!-- drawer content -->
-      <q-card v-if="sessionStore.isLoggedIn" class="left-drawer-card float-right q-mt-xl q-mr-md" bordered flat>
+      <q-card v-if="sessionStore.isLoggedIn" class="rounded-card left-drawer-card float-right q-mt-xl q-mr-md" bordered flat>
         <q-card-section>
           <q-item>
           <q-list>
@@ -103,7 +103,6 @@ const logout = () => {
 <style scoped>
 .left-drawer-card {
   width: 350px;
-  border-radius: 14px;
   margin-top: 113px;
 }
 

@@ -9,7 +9,7 @@
 
       <div class="q-mt-none">
         <q-form @submit.prevent="postIdeaFn">
-          <q-card class="my-card" bordered flat>
+          <q-card class="this-card rounded-card" bordered flat>
             <q-card-section>
               <q-input
                 filled
@@ -75,8 +75,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 import { useIdeaStore } from 'stores/idea-store';
 import { useSessionStore } from 'stores/session-store';
 
@@ -126,12 +126,10 @@ const postIdeaFn = () => {
   newIdea.value = {};
 }
 
-
 </script>
 
 <style scoped>
-.my-card {
+.this-card {
   margin-bottom:5px;
-  border-radius: 14px;
 }
 </style>

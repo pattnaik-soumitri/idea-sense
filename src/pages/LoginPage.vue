@@ -3,7 +3,7 @@
 
     <h4 class="q-mb-lg q-ml-md">Login</h4>
 
-    <q-card bordered flat class="q-mt-none">
+    <q-card bordered flat class="rounded-card q-mt-none">
       <q-card-section>
         <q-form
           @submit="onSubmit"
