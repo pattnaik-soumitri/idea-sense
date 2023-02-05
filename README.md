@@ -2,6 +2,10 @@
 
 An app to explore, share and collaborate on ideas.
 
+## Todos
+
+- Fix form validation error after adding an idea and navigating back to add idea page.
+
 ## Install the dependencies
 ```bash
 yarn
