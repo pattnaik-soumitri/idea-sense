@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onDeactivated } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useIdeaStore } from 'stores/idea-store';
@@ -89,6 +89,14 @@ const sessionStore = useSessionStore();
 
 // REFS
 const newIdea = ref({});
+
+// HOOKS
+
+// This is tp clear the form after Cancel button is clicked.
+onDeactivated(() => {
+  // Clear the state
+  newIdea.value = {};
+});
 
 // FUNCTIONS
 const counterLabelFn = ({ totalSize }) => {
