@@ -8,7 +8,7 @@
       </div>
 
       <div class="q-mt-none">
-        <q-form greedy>
+        <q-form @submit.prevent="postIdeaFn">
           <q-card class="my-card" bordered flat>
             <q-card-section>
               <q-input
@@ -75,13 +75,58 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
+import { useIdeaStore } from 'stores/idea-store';
+import { useSessionStore } from 'stores/session-store';
+
+const router = useRouter();
+const $q = useQuasar();
+
+// STORES
+const ideaStore = useIdeaStore();
+const sessionStore = useSessionStore();
 
 // REFS
-const newIdea = ref({})
+const newIdea = ref({});
 
+// FUNCTIONS
 const counterLabelFn = ({ totalSize }) => {
         return `${totalSize}`
 }
+
+
+const postIdeaFn = () => {
+  const nextId = Math.max(...ideaStore.ideas.map(idea => idea.id));
+  const newIdeaDto =
+  {
+        id: nextId,
+        title: newIdea.value.title,
+        author: sessionStore.fullName,
+        avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+        createDate: new Date(),
+        content: newIdea.value.description,
+        link: '',
+        linkType: '',
+        likes: [],
+        likeCount: 0,
+        liked: false
+  }
+
+  ideaStore.addIdea(newIdeaDto);
+  $q.notify({
+    message: 'Idea created successfully.',
+      position: 'top',
+      avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
+      actions: [
+        { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+      ]
+  });
+  router.push('/');
+  newIdea.value = {};
+}
+
+
 </script>
 
 <style scoped>
