@@ -6,10 +6,10 @@
 
         <div class="row q-mb-none items-center">
           <div class="col">
-            <h5 class="q-ml-md">Ideas...</h5>
+            <h5 class="q-ml-md">Thoughts...</h5>
           </div>
           <div class="col">
-            <q-btn to="/ideas/add" color="primary" class="float-right" icon="share" label="Share your idea" />
+            <q-btn to="/ideas/add" color="primary" class="float-right" icon="share" label="Share yours" />
           </div>
         </div>
 
@@ -41,11 +41,11 @@
             <q-separator />
 
             <q-card-section class="text-body1 q-pt-sm">
-              <p>{{ idea.content }}</p>
+              <p v-html="idea.content"></p>
             </q-card-section>
 
-            <q-video v-if="idea.linkType === 'video'" :src="idea.link" :ratio="16/9" fetchpriority="high" />
-            <q-img v-if="idea.linkType === 'image'" :src="idea.link" />
+            <q-video v-if="idea.thumbnailType === 'video'" :src="idea.thumbnailLink" :ratio="16/9" fetchpriority="high" />
+            <q-img v-if="idea.thumbnailType === 'image'" :src="idea.thumbnailLink" />
 
             <q-separator />
 

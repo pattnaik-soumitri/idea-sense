@@ -12,7 +12,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer class="q-mobile-only" show-if-above v-model="leftDrawerOpen" side="left" width="570" style="background-color: #f3f2ee">
+    <q-drawer class="q-mobile-only" show-if-above v-model="leftDrawerOpen" side="left" width="520" style="background-color: #f3f2ee">
       <!-- drawer content -->
       <q-card v-if="sessionStore.isLoggedIn" class="rounded-card left-drawer-card float-right q-mt-xl q-mr-md" bordered flat>
         <q-card-section>
@@ -31,7 +31,7 @@
               <q-item-section avatar>
                 <q-icon name="share" size="md" />
               </q-item-section>
-              <q-item-section class="text-subtitle1 text-weight-bold">Share your idea</q-item-section>
+              <q-item-section class="text-subtitle1 text-weight-bold">Share your thought</q-item-section>
             </q-item>
 
 
@@ -43,7 +43,7 @@
               <q-item-section class="text-subtitle1 text-weight-bold">Profile</q-item-section>
             </q-item>
 
-            <q-separator />
+            <q-separator class="q-mt-md" />
 
             <!-- LOGOUT NAV LINK -->
             <q-item @click="logout()" v-ripple clickable exact>
@@ -58,7 +58,7 @@
       </q-card>
     </q-drawer>
 
-    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" width="570" style="background-color: #f3f2ee">
+    <q-drawer show-if-above v-model="rightDrawerOpen" side="right" width="520" style="background-color: #f3f2ee">
       <!-- drawer content -->
     </q-drawer>
 

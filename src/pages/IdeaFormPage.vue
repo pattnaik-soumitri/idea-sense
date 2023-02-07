@@ -1,16 +1,20 @@
 <template>
   <q-page>
     <div class="container">
+
+      <!-- HEADER -->
       <div class="row items-center">
-        <div class="q-ml-md col">
-          <h5>Share one of your own</h5>
+        <div class="col q-ml-md ">
+          <h5 class="q-color-primary">Share one of your own</h5>
         </div>
       </div>
 
       <div class="q-mt-none">
-        <q-form @submit.prevent="postIdeaFn">
+        <q-form @submit.prevent="submitIdeaFormFn">
           <q-card class="this-card rounded-card" bordered flat>
             <q-card-section>
+
+              <!-- TITLE -->
               <q-input
                 filled
                 type="text"
@@ -21,22 +25,44 @@
                 autocomplete="off"
               />
 
-              <q-input
-                filled
-                type="textarea"
-                multi
+              <!-- DESCRIPTION -->
+              <q-editor
                 v-model="newIdea.description"
-                label="Description"
-                lazy-rules
-                :rules="[ val => val && val.length > 0 || 'Please type something']"
-                autocomplete="off"
+                required
+                placeholder="Description"
+                min-height="20rem"
+                class="q-mb-md"
+                content-class="bg-grey-2"
+                :toolbar="[
+                            [
+                              {
+                                icon: $q.iconSet.editor.formatting,
+                                fixedIcon: true,
+                                fixedLabel:true,
+                                list: 'no-icons',
+                                options: [
+                                  'h4',
+                                  'h5',
+                                  'h6',
+                                  'p',
+                                  'code'
+                                ]
+                              },
+                            ],
+                            ['bold', 'italic', 'underline'],
+                            ['unordered', 'link', 'quote'],
+                            ['removeFormat']
+                          ]"
+
               />
 
-              <div class="row">
+              <!-- THUMBNAIL -->
+              <div class="row q-mb-md">
                 <q-file
                   v-model="newIdea.thumbnailFile"
                   label="Pick a thumbnail file"
                   accept=".mp4, .jpeg, .png, .gif, .ppt, .pptx, .doc, .docx"
+                  hint="Add a thumbnail to appear along with idea title and description"
                   :rules="[ val => val ? val: null || 'Please select a thumbnail file']"
                   filled
                   counter
@@ -49,18 +75,85 @@
                 </q-file>
               </div>
 
-              <div class="row justify-end q-mt-md">
+              <!-- TAG -->
+              <q-select
+                v-model="newIdea.tags"
+                multiple
+                max-values="5"
+                new-value-mode="add-unique"
+                filled
+                hide-dropdown-icon
+                use-input
+                use-chips
+                input-debounce="0"
+                label="Tags"
+                :options="options"
+                @filter="filterFn"
+                hint="Add up to 5 tags to describe what your idea is about"
+              >
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      No results
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+
+              <!-- PRIVATE TOGGLE -->
+              <q-toggle
+                label="Private"
+                v-model="newIdea.isPrivate"
+                class="q-mt-md q-mb-md"
+              />
+
+              <!-- {{ newIdea }} -->
+
+              <!-- INFO PANEL -->
+              <q-card
+              class="info"
+              flat
+              bordered
+              >
+              <q-card-section style="background-color: #e3f2fd;">
+                <div class="row justify-content">
+                  <div class="col-1">
+                    <q-icon
+                      name="info"
+                      size="sm"
+                      color="blue-8"
+                    />
+                  </div>
+                  <div class="col-11">
+                    <span class="text-body2">
+                      All public posts go thorough moderator approval process before appearing publicly.
+                    </span>
+                  </div>
+                </div>
+              </q-card-section>
+              </q-card>
+
+              <!-- ACTION BUTTONS -->
+              <div class="row justify-end q-mt-xl">
                   <q-btn
                     type="submit"
-                    label="Submit"
+                    label="Publish"
                     color="primary"
-                    class="q-mr-sm"
+                    class="q-mr-md"
                   />
+
+                  <q-btn
+                    type="submit"
+                    label="Save as draft"
+                    color="primary"
+                    class="q-mr-md"
+                    outline
+                  />
+
                   <q-btn
                     to="/"
-                    label="Cancel"
+                    label="Discard"
                     color="primary"
-                    class="q-ml-sm"
                     flat
                   />
               </div>
@@ -87,15 +180,32 @@ const $q = useQuasar();
 const ideaStore = useIdeaStore();
 const sessionStore = useSessionStore();
 
+
 // REFS
-const newIdea = ref({});
+
+// 1. new idea ref
+const newIdeaBlankObj = {
+  id: null,
+  title: '',
+  description: '',
+  tags: [],
+  isPrivate: false,
+}
+const newIdea = ref(newIdeaBlankObj);
+
+// 2. Tag options ref
+const stringOptions = [
+  'Information Technology', 'Machine Learning', 'Computer Vision', 'NLP', 'Cloud'
+]
+const options = ref(stringOptions);
+
 
 // HOOKS
 
 // This is tp clear the form after Cancel button is clicked.
 onDeactivated(() => {
-  // Clear the state
-  newIdea.value = {};
+  // Clear/reset the state
+  newIdea.value = {...newIdeaBlankObj};
 });
 
 // FUNCTIONS
@@ -103,23 +213,54 @@ const counterLabelFn = ({ totalSize }) => {
         return `${totalSize}`
 }
 
+const filterFn = (val, update, abort) => {
+  // call abort() at any time if you can't retrieve data somehow
 
-const postIdeaFn = () => {
+  setTimeout(() => {
+    update(() => {
+      if (val === '') {
+        options.value = stringOptions
+      }
+      else {
+        const needle = val.toLowerCase()
+        options.value = stringOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      }
+    })
+  }, 1500)
+}
+
+
+const submitIdeaFormFn = (e) => {
+  console.log(`Executing submitIdeaFormFn()... | Submitter: ${e.submitter.innerText}`);
+  const saveAsDraft = e.submitter.innerText === 'SAVE AS DRAFT';
   const nextId = Math.max(...ideaStore.ideas.map(idea => idea.id));
   const newIdeaDto =
   {
         id: nextId,
         title: newIdea.value.title,
-        author: sessionStore.fullName,
-        avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
-        createDate: new Date(),
         content: newIdea.value.description,
-        link: '',
-        linkType: '',
+        thumbnailType: '',
+        thumbnailLink: '',
+        tags: newIdea.value.tags,
+        isPrivate: newIdea.value.isPrivate,
+
+        isDraft: saveAsDraft,
+        isApproved: false,
+
         likes: [],
         likeCount: 0,
-        liked: false
+        liked: false,
+
+        author: sessionStore.fullName,
+        avatar: `https://i.pravatar.cc/150?img=${Math.floor(Math.random() * 70)}`,
+
+        createDate: new Date(),
+        createdBy: sessionStore.fullName,
+
+        lastUpdatedBy: sessionStore.fullName,
+        lastUpdated: new Date(),
   }
+  console.log("newIdeaDto:", newIdeaDto);
 
   ideaStore.addIdea(newIdeaDto);
   $q.notify({

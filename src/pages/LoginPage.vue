@@ -66,7 +66,7 @@ const keepLoggedIn = ref(false);
 const onSubmit = function() {
   console.log(`Executing onSubmit() ...`);
 
-  if(email.value === 'biki636@gmail.com' && password.value === 'password') {
+  if(true) { // By-pass login
     sendNotification(true);
     sessionStore.login();
 
